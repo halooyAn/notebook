@@ -11,17 +11,18 @@
 ## 安装`virtualenv`:
 
 `virtualenv`是用来创建虚拟环境的软件工具，我们可以通过`pip`或者`pip3`来安装：
+    
+    pip install virtualenv
 
-```
-pip install virtualenv
-
-pip3 install virtualenv
-```
+    pip3 install virtualenv
 
 ## 创建虚拟环境：
 
 创建虚拟环境非常简单，通过以下命令就可以创建了：
+
     virtualenv[虚拟环境名称]
+如果你当前的`Python3/Scripts`的查找路径在`Python2/Scripts`的前面，那么将会使用`python3`作为这个虚拟环境的解释器。如果`python2/Scripts`在`python3/Scripts`前面，那么将会使用`Python2`来作为这个虚拟环境的解释器。
+
     
 
 
