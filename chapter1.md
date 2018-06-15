@@ -33,8 +33,8 @@ virtualenv[虚拟环境名称]
 虚拟环境创建好了以后，那么可以进入到这个虚拟环境中，然后安装一些第三方包，进入虚拟环境在不同的操作系统中有不同的方式，一般分为两种，第一种是`Windows`，第二种是`*nix`：
 
 1. `Windows`进入虚拟环境：进入到虚拟环境的`Scripts`文件夹中，然后执行`activate`。
-2. *nix进入虚拟环境：`source /path/to/virtualenv/bin/activate`
-一旦你进入到了这个虚拟环境中，你安装包，卸载包都是在这个虚拟环境中，不会影响到外面的环境。
+2. \*nix进入虚拟环境：`source /path/to/virtualenv/bin/activate`
+   一旦你进入到了这个虚拟环境中，你安装包，卸载包都是在这个虚拟环境中，不会影响到外面的环境。
 
 ## 退出虚拟环境
 
@@ -43,8 +43,30 @@ virtualenv[虚拟环境名称]
 ## 创建虚拟环境时指定`Python`解释器版本：
 
 在电脑的环境变量中，一般是不会去更改一些环境变量的顺序的。也就是说比如你的`Python2/Scripts`在`Python3/Scripts`的前面，那么你不会经常去更改他们的位置。但是这时候我确实是想在创建虚拟环境的时候用`Python3`这个版本，这时候可以通过`-p`参数来指定具体的`Python`解释器：
+
+```
+virtualenv -p C:\Python36\python.exe [virutalenv name]
+```
+
+---
+
+## `virtualenvwrapper`:
+
+`virtualenvwrapper`这个软件包可以让我们管理虚拟环境变得更加简单。不用再跑到某个目录下通过`virtualenv`来创建虚拟环境，并且激活的时候也要跑到具体的目录下去激活。
+
+## 安装`virtualenvwrapper`:
+
+1. `*nix`:`pip install virtualenvwrapper`
+2. `windows`:`pip install virtualenvwrapper-win`
+
+## `virtualenvwrapper`基本使用：
+
+1. 创建虚拟环境：
+
+       mkvirtualenv my_env
     
-        virtualenv -p C:\Python36\python.exe [virutalenv name]
+    那么会在你当前用户下创建一个Env的文件夹，然后将这个虚拟环境安装到这个目录下。如果你电脑中安装了python2和python3，并且两个版本中都安装了virtualenvwrapper，那么将会使用环境变量中第一个出现的Python版本来作为这个虚拟环境的Python解释器。
+   
 
 
 
