@@ -268,4 +268,83 @@
 
     edit_user()
 ```
+## `wraps`装饰器
 
+采用之前的装饰器，会让我们的函数失去一些属性，比如`__name__`，这样在一些代码中会产生错误，比如`Flask`开发中。如果我们想要用装饰器，并且仍想保留函数的一些属性，比如`__name__`，那么可以使用`wraps`装饰器，以下是没有使用`wraps`装饰器的代码：
+
+```py
+    def login_required(func):
+    
+        def wrapper(*args,**kwargs):
+            if user['is_login'] == True:
+                func(*args,**kwargs)
+            else:
+                print('跳转到登录页面')
+    
+        return wrapper
+    
+    @login_required
+    def edit_user(username):
+        print('用户名修改成功：%s'%username)
+    
+    
+    edit_user()
+    print(edit_user.__name__)
+    # 打印wrapper
+```
+以下再使用wraps装饰器，来优化代码：
+
+```py
+    from functools import wraps
+    
+    def login_required(func):
+        @wraps
+        def wrapper(*args,**kwargs):
+            if user['is_login'] == True:
+                func(*args,**kwargs)
+            else:
+                print('跳转到登录页面')
+    
+        return wrapper
+    
+    @login_required
+    def edit_user(username):
+        print('用户名修改成功：%s'%username)
+    
+    
+    edit_user()
+    print(edit_user.__name__)
+    # 打印edit_user
+```
+## 作业：实现一个可以计算一个函数用时多久的装饰器
+```py
+    from functools import wraps
+    import datetime
+    
+    USERNAME = "xiaohei"
+    USER_PASSWORD = "123456"
+    
+    
+    def login_time(func):
+    
+        @wraps(func)
+        def wrapper(*args,**kwargs):
+            start_time = datetime.datetime.now()
+            func(*args,**kwargs)
+            end_time = datetime.datetime.now()
+            print('您进行登录操作共用了%d秒' % (end_time- start_time).seconds)
+    
+        return wrapper
+    
+    
+    @login_time
+    def login():
+        username = input("请输入您的账户名:")
+        user_password = input("请输入您的密码:")
+        if username == USERNAME and user_password == USER_PASSWORD:
+            print("登录成功")
+        else:
+            print("账户名或密码错误，请重新尝试！")
+    
+    login()
+```
