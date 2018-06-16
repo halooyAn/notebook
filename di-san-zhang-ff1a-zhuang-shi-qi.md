@@ -325,7 +325,7 @@
     USER_PASSWORD = "123456"
     
     
-    def login_time(func):
+    def count_time(func):
     
         @wraps(func)
         def wrapper(*args,**kwargs):
@@ -337,7 +337,7 @@
         return wrapper
     
     
-    @login_time
+    @count_time
     def login():
         username = input("请输入您的账户名:")
         user_password = input("请输入您的密码:")
