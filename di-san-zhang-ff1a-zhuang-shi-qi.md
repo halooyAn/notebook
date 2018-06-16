@@ -118,32 +118,81 @@
 # 2. 装饰器
 
 ## 什么是装饰器：
+
 装饰器利用了函数也可以作为参数传递和闭包的特性，可以让我们的函数在执行之前或者执行之后方便的添加一些代码。这样就可以做很多事情了，比如`@classmethod`装饰器可以将一个普通的方法设置为类方法，`@staticmethod`装饰器可以将一个普通的方法设置为静态方法等。所以明白了装饰器的原理以后，我们就可以自定义装饰器，从而实现我们自己的需求。
+
 ## 理解：
+
 拿网站开发的例子来说。网站开发中，经常会碰到一些页面是需要登录后才能访问的。那么如果每次都在访问的视图函数中判断，很麻烦，而且代码很难维护，示例如下：
 
 ```py
     user = {
         "is_login": False
     }
-    
+
     def edit_user():
         if user['is_login'] == True:
             print('用户名修改成功')
         else:
             print('跳转到登录页面')
-    
+
     def add_article():
         if user['is_login'] == True:
             print('添加文章成功')
         else:
             print('跳转到登录页面')
-    
+
     edit_user()
     add_article()
 ```
 
+以上现在是只有两个函数，如果以后网站越来越大，需要做判断的地方越来越大，那么这种判断将显得非常低效并且难以维护，因此这时候我们可以采用装饰器来解决：
 
+```py
+    def edit_user():
+        print('用户名修改成功')
+    
+    def add_article():
+        print('添加文章成功')
+    
+    def login_required(func):
+    
+        def wrapper():
+            if user['is_login'] == True:
+                func()
+            else:
+                print('跳转到登录页面')
+    
+        return wrapper
+    
+    login_required(edit_user)
+    login_required(add_article)
+```
+这样我们把这个判断用户是否登录的逻辑就已经单独抽出放到login_required这个装饰器中了，以后如果某个函数想要做登录限制，那么就先传给login_required这个装饰器就可以了。
+但是以上方式写法很别扭，每次调用一个函数的时候要记得先传给login_required，容易忘记每次都要写，因此我们采用另外一种写法：
+
+```py
+    def login_required(func):
+    
+        def wrapper():
+            if user['is_login'] == True:
+                func()
+            else:
+                print('跳转到登录页面')
+    
+        return wrapper
+    
+    @login_required
+    def edit_user():
+        print('用户名修改成功')
+    
+    @login_required
+    def add_article():
+        print('添加文章成功')
+    
+    edit_user()
+    add_article()
+```
 
 
 
