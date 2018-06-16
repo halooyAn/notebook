@@ -168,8 +168,8 @@
     login_required(edit_user)
     login_required(add_article)
 ```
-这样我们把这个判断用户是否登录的逻辑就已经单独抽出放到login_required这个装饰器中了，以后如果某个函数想要做登录限制，那么就先传给login_required这个装饰器就可以了。
-但是以上方式写法很别扭，每次调用一个函数的时候要记得先传给login_required，容易忘记每次都要写，因此我们采用另外一种写法：
+这样我们把这个判断用户是否登录的逻辑就已经单独抽出放到`login_required`这个装饰器中了，以后如果某个函数想要做登录限制，那么就先传给`login_required`这个装饰器就可以了。
+但是以上方式写法很别扭，每次调用一个函数的时候要记得先传给`login_required`，容易忘记每次都要写，因此我们采用另外一种写法：
 
 ```py
     def login_required(func):
@@ -193,7 +193,79 @@
     edit_user()
     add_article()
 ```
+以上这种写法是装饰器中正确的写法，在函数定义开头的地方，通过@装饰器名就可以了，这样在调用`edit_user`和`add_article`的时候，就不需要手动的传给`login_required`了。
 
+## 被装饰的函数带有参数：
 
+被装饰的函数有参数是非常普遍的一种情况，这时候我们只需要在里面的函数中传递参数就可以了：
 
+```py
+    def login_required(func):
+    
+        def wrapper(username):
+            if user['is_login'] == True:
+                func(username)
+            else:
+                print('跳转到登录页面')
+    
+        return wrapper
+    
+    @login_required
+    def edit_user(username):
+        print('用户名修改成功：%s'%username)
+    
+    edit_user("zhiliao")
+```
+也有可能被装饰的函数中，参数是不固定的，因此这时候写一个固定的参数，不能成为一个普遍的装饰器，这时候可以采用`*args`和`**kwargs`组合起来，包含所有的参数：
+
+```py
+    def login_required(func):
+    
+        def wrapper(*args,**kwargs):
+            if user['is_login'] == True:
+                func(*args,**kwargs)
+            else:
+                print('跳转到登录页面')
+    
+        return wrapper
+    
+    @login_required
+    def edit_user(username):
+        print('用户名修改成功：%s'%username)
+    
+    edit_user()
+```
+## 带参数的装饰器：
+装饰器也可以传递参数。只不过如果给装饰器传递参数了，那么就要在这个装饰器中写两个方法了，示例代码如下：
+
+```py
+    def login_required(site='front'):
+        def outter_wrapper(func):
+            def inner_wrappre(*args,**kwargs):
+                if site == 'front':
+                    if user['is_login'] == True:
+                        print('进入到前台了')
+                        func(*args,**kwargs)
+                    else:
+                        print('跳转到前台的首页')
+                else:
+                    if user['is_login'] == True:
+                        print('进入到后台了')
+                        func(*args,**kwargs)
+                    else:
+                        print('跳转到后台的首页')
+            return inner_wrappre
+        return outter_wrapper
+    
+    
+    @login_required()
+    def edit_user():
+        print('用户名修改成功')
+        
+    @login_required()
+    def add_article():
+        print('添加文章成功')
+
+    edit_user()
+```
 
