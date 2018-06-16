@@ -146,53 +146,55 @@
     add_article()
 ```
 
-以上现在是只有两个函数，如果以后网站越来越大，需要做判断的地方越来越大，那么这种判断将显得非常低效并且难以维护，因此这时候我们可以采用装饰器来解决：
+以上现在是只有两个函数，如果以后网站越来越大，需要做判断的地方越来越多，那么这种判断将显得非常低效并且难以维护，因此这时候我们可以采用装饰器来解决：
 
 ```py
     def edit_user():
         print('用户名修改成功')
-    
+
     def add_article():
         print('添加文章成功')
-    
+
     def login_required(func):
-    
+
         def wrapper():
             if user['is_login'] == True:
                 func()
             else:
                 print('跳转到登录页面')
-    
+
         return wrapper
-    
+
     login_required(edit_user)
     login_required(add_article)
 ```
-这样我们把这个判断用户是否登录的逻辑就已经单独抽出放到`login_required`这个装饰器中了，以后如果某个函数想要做登录限制，那么就先传给`login_required`这个装饰器就可以了。
+
+这样我们把这个判断用户是否登录的逻辑就已经单独抽出放到`login_required`这个装饰器中了，以后如果某个函数想要做登录限制，那么就先传给`login_required`这个装饰器就可以了。  
 但是以上方式写法很别扭，每次调用一个函数的时候要记得先传给`login_required`，容易忘记每次都要写，因此我们采用另外一种写法：
 
 ```py
     def login_required(func):
-    
+
         def wrapper():
             if user['is_login'] == True:
                 func()
             else:
                 print('跳转到登录页面')
-    
+
         return wrapper
-    
+
     @login_required
     def edit_user():
         print('用户名修改成功')
-    
+
     @login_required
     def add_article():
         print('添加文章成功')
-    
+
     edit_user()
     add_article()
 ```
+
 以上这种写法是装饰器中正确的写法，在函数定义开头的地方，通过@装饰器名就可以了，这样在调用`edit_user`和`add_article`的时候，就不需要手动的传给`login_required`了。
 
 ## 被装饰的函数带有参数：
@@ -201,41 +203,44 @@
 
 ```py
     def login_required(func):
-    
+
         def wrapper(username):
             if user['is_login'] == True:
                 func(username)
             else:
                 print('跳转到登录页面')
-    
+
         return wrapper
-    
+
     @login_required
     def edit_user(username):
         print('用户名修改成功：%s'%username)
-    
+
     edit_user("zhiliao")
 ```
+
 也有可能被装饰的函数中，参数是不固定的，因此这时候写一个固定的参数，不能成为一个普遍的装饰器，这时候可以采用`*args`和`**kwargs`组合起来，包含所有的参数：
 
 ```py
     def login_required(func):
-    
+
         def wrapper(*args,**kwargs):
             if user['is_login'] == True:
                 func(*args,**kwargs)
             else:
                 print('跳转到登录页面')
-    
+
         return wrapper
-    
+
     @login_required
     def edit_user(username):
         print('用户名修改成功：%s'%username)
-    
+
     edit_user()
 ```
+
 ## 带参数的装饰器：
+
 装饰器也可以传递参数。只不过如果给装饰器传递参数了，那么就要在这个装饰器中写两个方法了，示例代码如下：
 
 ```py
@@ -256,47 +261,49 @@
                         print('跳转到后台的首页')
             return inner_wrappre
         return outter_wrapper
-    
-    
+
+
     @login_required()
     def edit_user():
         print('用户名修改成功')
-        
+
     @login_required()
     def add_article():
         print('添加文章成功')
 
     edit_user()
 ```
+
 ## `wraps`装饰器
 
 采用之前的装饰器，会让我们的函数失去一些属性，比如`__name__`，这样在一些代码中会产生错误，比如`Flask`开发中。如果我们想要用装饰器，并且仍想保留函数的一些属性，比如`__name__`，那么可以使用`wraps`装饰器，以下是没有使用`wraps`装饰器的代码：
 
 ```py
     def login_required(func):
-    
+
         def wrapper(*args,**kwargs):
             if user['is_login'] == True:
                 func(*args,**kwargs)
             else:
                 print('跳转到登录页面')
-    
+
         return wrapper
-    
+
     @login_required
     def edit_user(username):
         print('用户名修改成功：%s'%username)
-    
-    
+
+
     edit_user()
     print(edit_user.__name__)
     # 打印wrapper
 ```
+
 以下再使用wraps装饰器，来优化代码：
 
 ```py
     from functools import wraps
-    
+
     def login_required(func):
         @wraps
         def wrapper(*args,**kwargs):
@@ -304,39 +311,41 @@
                 func(*args,**kwargs)
             else:
                 print('跳转到登录页面')
-    
+
         return wrapper
-    
+
     @login_required
     def edit_user(username):
         print('用户名修改成功：%s'%username)
-    
-    
+
+
     edit_user()
     print(edit_user.__name__)
     # 打印edit_user
 ```
+
 ## 作业：实现一个可以计算一个函数用时多久的装饰器
+
 ```py
     from functools import wraps
     import datetime
-    
+
     USERNAME = "xiaohei"
     USER_PASSWORD = "123456"
-    
-    
+
+
     def count_time(func):
-    
+
         @wraps(func)
         def wrapper(*args,**kwargs):
             start_time = datetime.datetime.now()
             func(*args,**kwargs)
             end_time = datetime.datetime.now()
             print('您进行登录操作共用了%d秒' % (end_time- start_time).seconds)
-    
+
         return wrapper
-    
-    
+
+
     @count_time
     def login():
         username = input("请输入您的账户名:")
@@ -345,6 +354,9 @@
             print("登录成功")
         else:
             print("账户名或密码错误，请重新尝试！")
-    
+
     login()
 ```
+
+
+
