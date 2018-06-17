@@ -20,11 +20,11 @@
     # 列表是一个可迭代的对象
     ret = isinstance([1,2,3],Iterable)
     print(ret)
-    
+
     # 字符串是一个可迭代的对象
     ret = isinstance("abc",Iterable)
     print(ret)
-    
+
     # 整形不是一个可迭代的对象
     ret = isinstance(123,Iterable)
     print(ret)
@@ -50,7 +50,7 @@
             def __init__(self,start,end):
                 self.index = start
                 self.end = end
-    
+
             def __next__(self):
                 if self.index < self.end:
                     index = self.index
@@ -58,8 +58,8 @@
                     return index
                 else:
                     raise StopIteration()
-    
-    
+
+
         class MyRange(object):
             """
             可迭代对象
@@ -67,18 +67,18 @@
             def __init__(self,start,end):
                 self.start = start
                 self.end = end
-    
+
             def __iter__(self):
                 return MyRangeIterator(self.start,self.end)
-    
-    
+
+
         # 初始化一个可迭代的对象
         for x in MyRange(1,10):
             print(x)
-    
+
         # 使用itre函数将可迭代的对象转换为迭代器
         range_iterator = iter(MyRange(1,10))
-    
+
         # 不能遍历迭代器，只能通过next来迭代
         for x in range_iterator:
             print(x)
@@ -98,7 +98,7 @@
     # 普通的列表
     num_list = [x forx in range(1,100000000)]
     print(type(num_list))
-    
+
     # 生成式
     num_gen = (x for x in range(1,100000000))
     print(type(num_gen))
@@ -117,11 +117,11 @@
         yield 1    
         yield 2
         yield 3
-    ```
-    
+```
+
 那么想要获取里面的值，可以通过以下方式获取：
-    
-    ```py
+
+```py
         ret = my_gen()
         print(next(ret))
         print(next(ret))
@@ -138,8 +138,8 @@
             temp = yield start
             print(temp)
             start += 1
-    
-    
+
+
     ret = my_gen(1)    
     # next(ret)返回1
     # 以下结果会打印1
@@ -162,7 +162,7 @@
             start += 1
             # 触发StopIterator异常，会导致不能继续遍历
             return "nihao"
-    
+
     ret = my_gen(1)   
     for x in ret:
         print(x)
@@ -182,12 +182,11 @@
             b = a+b
             a = c
             index += 1
-            
+
 
     for x in fibo(6):
-        print(x)   
-``` 
-
+        print(x)
+```
 
 
 
