@@ -66,5 +66,22 @@
 1. `del 对象.属性名`
 2. `delattr(对象,"属性名")`
 
+# `__slots__`魔术变量： {#slots魔术变量：}
+
+有时候我们想指定某个类的对象，只能使用我指定的这些属性，不能随便添加其他的属性，那么这时候就可以使用`__slots__`魔术变量。这个魔术变量是一个列表或者一个元组，里面存放属性的名字，以后在对象外面，就只能添加这个魔术变量中指定的属性，不能添加其他属性，示例代码如下：
+```py
+    class Person(object):
+        __slots__ = ('name','age')
+        def __init__(self,name):
+            self.name = name
+    
+    p = Person('zhiliao')
+    setattr(p,'height',180)
+    # 报错
+
+```
+
+
+
 
 
