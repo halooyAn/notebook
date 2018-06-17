@@ -329,33 +329,40 @@
 ```py
     from functools import wraps
     import datetime
-
+    
     USERNAME = "xiaohei"
     USER_PASSWORD = "123456"
-
-
-    def count_time(func):
-
+    
+    
+    def login_time(func):
+    
         @wraps(func)
         def wrapper(*args,**kwargs):
             start_time = datetime.datetime.now()
             func(*args,**kwargs)
             end_time = datetime.datetime.now()
-            print('您进行登录操作共用了%d秒' % (end_time- start_time).seconds)
-
+            print('您进行登录操作共用时%d秒' % (end_time- start_time).seconds)
+    
         return wrapper
-
-
-    @count_time
+    
+    
+    @login_time
     def login():
         username = input("请输入您的账户名:")
         user_password = input("请输入您的密码:")
-        if username == USERNAME and user_password == USER_PASSWORD:
-            print("登录成功")
-        else:
-            print("账户名或密码错误，请重新尝试！")
-
-    login()
+        while True:
+            if username == USERNAME and user_password == USER_PASSWORD:
+                print("登录成功")
+                break
+            else:
+                print("账户名或密码错误，请重新尝试！")
+                username = input("请输入您的账户名:")
+                user_password = input("请输入您的密码:")
+    
+    
+    if __name__ == '__main__':
+        login()
+    
 ```
 
 
