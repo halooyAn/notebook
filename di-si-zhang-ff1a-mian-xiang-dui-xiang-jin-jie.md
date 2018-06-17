@@ -44,21 +44,27 @@
 ### 动态添加静态方法： {#动态添加静态方法：}
 
 添加静态方法，是把这个方法添加给类。因此也是直接给类添加的，并且使用`staticmethod`这个装饰器。示例方法如下：
+
 ```py
     import types
-    
+
     class Person(object):
         country = 'china'
         def __init__(self,name):
             self.name = name
-    
+
     @staticmethod
     def run():
         print('在奔跑')
-    
+
     Person.run = run
     Person.run()
 ```
+
+### 动态删除属性和方法： {#动态删除属性和方法：}
+
+1. `del 对象.属性名`
+2. `delattr(对象,"属性名")`
 
 
 
