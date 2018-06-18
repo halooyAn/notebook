@@ -103,7 +103,8 @@
     print(a())
    ```
 
-2. `type("class name",(继承的父类元祖，可多继承也可为空),{该类的属性字典})`
+2. `type("class name",(父类元祖，可多继承也可为空),{该类的属性字典})`
+
    ```py
     Person = type("Person",(object,),{"name":"xiaohei","age":19,"sex":"male"})
     print(Person)
