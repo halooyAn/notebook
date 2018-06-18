@@ -108,8 +108,9 @@
    ```py
     Person = type("Person",(object,),{"name":"xiaohei","age":19,"sex":"male"})
     print(Person)
-    print(Person())
+    print(Person()
    ```
+3. 元类
 
 
 
