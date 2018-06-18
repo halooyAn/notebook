@@ -82,7 +82,10 @@
 ```
 
 # 动态创建类：
-```py
+
+1. 普通函数动态创建类
+
+   ```py
     def class_create(name):
         def create():
             if name == "zhiliao":
@@ -94,14 +97,18 @@
                     pass
                 return Car
         return create
-    
+
     a = class_create("zhiliao")
     print(a)
     print(a())
-        
-  
-        
-```
+   ```
+
+2. `type("class name",(继承的父类元祖，可多继承也可为空),{该类的属性字典})`
+   ```py
+    Person = type("Person",(object,),{"name":"xiaohei","age":19,"sex":"male"})
+    print(Person)
+    print(Person())
+   ```
 
 
 
