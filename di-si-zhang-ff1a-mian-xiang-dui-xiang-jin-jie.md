@@ -83,7 +83,7 @@
 
 # 动态创建类：
 
-1. 普通函数动态创建类
+## 1. 普通函数动态创建类
 
    ```py
     def class_create(name):
@@ -103,14 +103,15 @@
     print(a())
    ```
 
-2. `type("class name",(父类元祖，可多继承也可为空),{该类的属性字典})`
+## 2. `type("class name",(父类元祖，可多继承也可为空),{该类的属性字典})`
 
    ```py
     Person = type("Person",(object,),{"name":"xiaohei","age":19,"sex":"male"})
     print(Person)
     print(Person()
    ```
-3. 元类
+## 3. 元类：
+
 
 
 
