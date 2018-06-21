@@ -42,7 +42,7 @@
     print(id(a))
     print(id(b))
 ```
-
+____
 # Python垃圾回收机制 {#python垃圾回收机制}
 
 ## 引用计数： {#引用计数：}
