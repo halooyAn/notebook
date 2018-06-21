@@ -47,5 +47,23 @@
 
 ## 引用计数： {#引用计数：}
 
+在`Python`中，使用了引用计数这一技术实现内存管理。一个对象被创建完成后就有一个变量指向他，那么就说明他的引用计数为1，以后如果有其他变量指向他，引用计数也会相应增加，如果将一个变量不再执行这个对象，那么这个对象的引用计数减1。如果一个对象没有任何变量指向他，也即引用计数为0，那么这个对象会被`Python`回收。示例代码如下：
+
+```py
+    class Person(object):
+        def __init__(self,name):
+            self.name = name
+    
+        def __del__(self):
+            print('%s执行了del函数'%self.name)
+    
+    while True:
+        p1 = Person('p1')
+        p2 = Person('p2')
+        del p1
+        del p2
+        a = input('test:')
+```
+
 
 
