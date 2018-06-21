@@ -50,7 +50,7 @@ virtualenv -p C:\Python36\python.exe [virutalenv name]
 
 ---
 
-## `virtualenvwrapper`:
+# `virtualenvwrapper`:
 
 `virtualenvwrapper`这个软件包可以让我们管理虚拟环境变得更加简单。不用再跑到某个目录下通过`virtualenv`来创建虚拟环境，并且激活的时候也要跑到具体的目录下去激活。
 
