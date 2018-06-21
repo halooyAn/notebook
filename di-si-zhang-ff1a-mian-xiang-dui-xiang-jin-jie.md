@@ -308,6 +308,7 @@ Foo中有`__metaclass__`这个属性吗？如果是，`Python`会在内存中通
   ```
 
 * 类的形式:
+
   ```py
     class UpperAttrMetaclass(type):
           def __new__(cls, name, bases, dct):
@@ -318,11 +319,13 @@ Foo中有`__metaclass__`这个属性吗？如果是，`Python`会在内存中通
 
 ## `Python3`中创建类时指定`metaclass`时不用`__metaclass__`属性，
 
-  直接在定义创建类时指定`metaclass`
-  ```py
+直接在定义创建类时指定`metaclass`
+
+```py
     class Person(object,metaclass=UpperAttrsMetaClass))
         pass
-  ```
+        
+```
 
 
 
