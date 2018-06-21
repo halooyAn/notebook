@@ -53,6 +53,25 @@
     class Person(object):
         def __init__(self,name):
             self.name = name
+
+        def __del__(self):
+            print('%s执行了del函数'%self.name)
+
+    while True:
+        p1 = Person('p1')
+        p2 = Person('p2')
+        del p1
+        del p2
+        a = input('test:')
+```
+
+## 循环引用： {#循环引用：}
+
+引用计数这一技术虽然可以在一定程度上解决内存管理的问题。但是还是有不能解决的问题，即**循环引用**。比如现在有两个对象分别为a和b，a指向了b，b又指向了a，那么他们两的引用计数永远都不会为0。也即永远得不到回收。看以下示例：
+```py
+    class Person(object):
+        def __init__(self,name):
+            self.name = name
     
         def __del__(self):
             print('%s执行了del函数'%self.name)
@@ -60,9 +79,39 @@
     while True:
         p1 = Person('p1')
         p2 = Person('p2')
+        # 循环引用后，永远得不到释放
+        p1.next = p2
+        p2.prev = p1
         del p1
         del p2
         a = input('test:')
+```
+## 标记清除和分代回收：
+在Python程序中，每次你新创建了一个对象，那么就会将这个对象挂到一个叫做零代链表中（当然这个链表是`Python`内部的，`Python`开发者是没法访问到的）。比如现在你在程序中创建四个`Person`对象，分别叫做`p1`、`p2`、`p3`以及`p4`，然后`p1`与`p2`之间互相引用，并且让`p3`和`p4`的引用计数为2，示例代码如下：
+```py
+    import sys
+    
+    class Person(object):
+        def __init__(self,name):
+            self.name = name
+            self.next = None
+            self.prev = None
+    
+    p1 = Person('p1')
+    p2 = Person('p2')
+    p3 = Person('p3')
+    p4 = Person('p4')
+    
+    p1.next = p2
+    p2.prev = p1
+    
+    temp1 = p3
+    temp2 = p4
+    
+    print(sys.getrefcount(p1))
+    print(sys.getrefcount(p2))
+    print(sys.getrefcount(p3))
+    print(sys.getrefcount(p4))
 ```
 
 
