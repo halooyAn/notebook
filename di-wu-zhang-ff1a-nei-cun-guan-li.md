@@ -1,4 +1,4 @@
-# 对象池: {#对象池}
+# 对象池 {#对象池}
 
 ## 小整数对象池： {#小整数对象池：}
 
@@ -35,11 +35,17 @@
     # 以下两个值会相等
     print(id(a))
     print(id(b))
-    
+
     a = "hello world"
     b = "hello world"
     # 以下两个值不想等
     print(id(a))
     print(id(b))
 ```
+
+# Python垃圾回收机制 {#python垃圾回收机制}
+
+## 引用计数： {#引用计数：}
+
+
 
