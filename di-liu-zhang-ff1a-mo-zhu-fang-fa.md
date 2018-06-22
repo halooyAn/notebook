@@ -92,8 +92,85 @@
 有些时候我们想要比较两个对象。比如哪个对象更大，哪个对象更小，两个对象是否相等。如果我们不告诉`Python`要根据什么方式比较，那么`Python`是不知道如何比较的。这时候我们就可以实现一些比较的魔术方法来达到我们的需求。
 
 ## `__cmp__(self,other)`魔术方法：
-这个魔术方法是**Python2**中用来比较大小的。这个方法接收另外一个参数用来作为比较的。如果self比other大，那么应该返回一个正数，如果self和other相等，那么应该返回0，如果self比other小，那么应该返回一个负数。这里以一个小案例来讲解这个方法的使用：
+这个魔术方法是**Python2**中用来比较大小的。这个方法接收另外一个参数用来作为比较的。如果`self`比`other`大，那么应该返回一个正数，如果`self`和`other`相等，那么应该返回0，如果`self`比`other`小，那么应该返回一个负数。这里以一个小案例来讲解这个方法的使用：
+```py
+    class Person(object):
+        def __init__(self,name,age,height):
+            self.name = name
+            self.age = age
+            self.height = height
+    
+        def __cmp__(self, other):
+            if self.age == other.age:
+                if self.height == self.height:
+                    return 0
+                else:
+                    return 1 if self.height > other.height else -1
+            return 1 if self.age > other.age else -1
+```
+`__cmp__`方法是在**Python2**中才能使用，在Python3中已经废弃这个方法了。因此不建议使用这个方法。
 
+## `__eq__(self,other)`魔术方法：
+在使用`==`比较运算符比较两个对象是否相等的时候会调用这个方法。如果是相等，那么应该返回`True`，否则返回`False`：
+```py
+    class Person(object):
+        def __init__(self,name,age,height):
+            self.name = name
+            self.age = age
+            self.height = height
+    
+        def __eq__(self, other):
+            # self == other
+            if self.age == other.age:
+                if self.height == other.height:
+                    return True
+                else:
+                    return True if self.height == other.height else False
+```
+## `__ne__(self,other)`魔术方法：
+在使用`!=`比较运算符来比较两个对象是否不相等的时候会调用这个方法。如果这两个对象不想等，那么应该返回`True`，否则返回`False`：
+```py
+    class Person(object):
+        def __init__(self,name,age,height):
+            self.name = name
+            self.age = age
+            self.height = height
+    
+        def __ne__(self, other):
+            # self != other
+            return False if self.age == other.age and self.height == other.height else True
+```
+## `__lt__(self,other)`魔术方法：
+在使用`<`比较运算符来比比较两个对象大小的时候会调用这个方法。如果`self<other`，那么应该返回`True`，否则返回`False`。示例代码如下：
+```py
+    class Person(object):
+        def __init__(self,name,age,height):
+            self.name = name
+            self.age = age
+            self.height = height
+    
+        def __lt__(self, other):
+            # self < other
+            if self.age == other.age:
+                return True if self.height < other.height else False
+            return self.age < other.age
+```
+## `__gt__(self,other)`魔术方法：
+在使用`>`比较运算符的时候会调用这个方法。如果`self>other`，那么应该返回`True`，否则返回`False`。示例代码如下：
+```py
+    class Person(object):
+        def __init__(self,name,age,height):
+            self.name = name
+            self.age = age
+            self.height = height
+    
+        def __gt__(self, other):
+            # self > other
+            if self.age == other.age:
+                return True if self.height > other.height else False
+            return self.age > other.age
+
+```   
 
 ___
 
