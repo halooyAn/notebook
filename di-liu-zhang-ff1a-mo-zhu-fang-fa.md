@@ -414,5 +414,70 @@
 
 ---
 
+# 魔术方法（五）创建定制的序列 {#魔术方法（五）——创建定制的序列}
 
+在`Python`中，内置了一些数据类型。比如列表、元组、字典、集合等。这些数据类型之所以能够表现出一些序列的行为（下标操作、遍历等），是因为他们实现了一些协议，或者一些魔术方法。如果我们自己写一个类，也实现这些协议或者魔术方法，其实我们自己也可以定义属于自己的序列。
+
+## 一个序列容器的魔术方法： {#一个序列容器的魔术方法：}
+
+1. `__len__(self)`：在使用`len(obj)`函数的时候会调用这个魔术方法。
+
+2. `__getitem__(self,key)`：在使用下标操作`temp['key']`以及切片操作的时候会执行这个魔术方法。
+
+3. `__setitem__(self,key,value)`：在给这个容器设置`key`和`value`
+   的时候会调用这个魔术方法。
+   
+4. `__delitem__(self,key)`：在删除容器中的某个`key`对应的这个值的时候会调用这个魔术方法。
+
+5. `__iter__(self)`：在遍历这个容器的时候，会调用容器的这个方法，然后返回一个迭代器，再调用这个迭代器的`__next__`方法。
+
+6. `__reversed__(self)`：在调用`reversed(obj)`函数的时候会调用这个方法。 以下代码将上面这些魔术方法总结起来，写一个自定义的容器，并且能够实现`head`、`tail`、`last`、`drop`和`take`的列表类。
+
+代码示例如下：
+
+```py
+    class ZLList(object):
+     def __init__(self,values=None):
+         if values is None:
+             self.values = []
+         else:
+             self.values = values
+    
+     def __iter__(self):
+         return iter(self.values)
+    
+     def __len__(self):
+         return len(self.values)
+    
+     def __getitem__(self, item):
+         return self.values[item]
+    
+     def __setitem__(self, key, value):
+         self.values[key] = value
+    
+     def __delitem__(self, key):
+         del self.values[key]
+    
+     def __reversed__(self):
+         return reversed(self.values)
+    
+     def append(self,value):
+         self.values.append(value)
+    
+     def remove(self,value):
+         return self.values.remove(value)
+    
+     def head(self):
+         return self.values[0]
+    
+     def tail(self):
+         return self.values[-1]
+    
+     def take(self,n):
+         return self.values[:n]
+```
+
+## 可变容器和不可变容器：
+可变容器可以对容器中的元素进行更改，比如删除一个元素，添加一个容器。而不可变容器不能做这些操作。因此如果你向定义一个不可变容器，那么不应该实现`__setitem__`、`__delitem__`方法。
+___
 
