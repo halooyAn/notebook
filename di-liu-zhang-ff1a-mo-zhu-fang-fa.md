@@ -352,34 +352,41 @@
     # c1 /= 2
     print(c1)
 ```
-____
+
+---
+
 # 魔术方法（四）控制属性的访问和设置
+
 ## `__getattr__`魔术方法：
+
 在访问一个对象的某个属性的时候，如果这个属性不存在，那么就会执行`__getattr__`方法，将属性的名字传进去。如果这个属性存在，那么就不会调用`__getattr__`方法：
+
 ```py
     class Person(object):
         def __init__(self,name):
             self.name = name
-    
+
         def __getattr__(self, item):
             if item == 'age':
                 return 18
             else:
                 return None
-    
+
     p1 = Person('zhiliao')
     print(p1.name)
     print(p1.age)
 ```
 
 ## `__setattr__`魔术方法：
+
 只要给一个对象的属性设置值，那么就会调用这个方法。但是要注意的是，不要在这个方法中调用`self.xxx=xxx`的形式，因为会产生递归调用。如果想要给对象的属性设置值，那么应该使用`__dict__`这个魔术属性。示例代码如下：
+
 ```py
     class Person(object):
         def __init__(self,name):
             self.name = name
             self.is_adult = False
-    
+
         def __setattr__(self, key, value):
             if key == 'age':
                 self.__dict__[key] = value
@@ -392,19 +399,20 @@ ____
 ```
 
 ## __getattribute__魔术方法：
-这个魔术方法是，只要你访问了一个对象的属性，不管这个属性存不存在都会去执行这个方法，所以在写这个方法的时候要小心循环调用。这个方法只能在新式类中使用，不能在旧时类中使用。示例代码如下：
 
+这个魔术方法是，只要你访问了一个对象的属性，不管这个属性存不存在都会去执行这个方法，所以在写这个方法的时候要小心循环调用。这个方法只能在新式类中使用，不能在旧时类中使用。示例代码如下：
 
 ```py
     class Person(object):
         def __init__(self,name):
             self.name = name
-    
+
         def __getattribute__(self, item):
             print(item)
             return super(Person, self).__getattribute__(item)
 ```
 
+---
 
 
 
