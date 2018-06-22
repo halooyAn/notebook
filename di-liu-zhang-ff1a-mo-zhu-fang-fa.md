@@ -193,6 +193,160 @@ _________________________
 以上讲了`<`、`>`、`==`以及`!=`的执行方法。没有讲`<=`和`>=`这两个运算符执行的方法，其实这两个方法是这样执行的，拿`<=`为例来讲，首先执行`<`判断，如果为`False`，那么会再执行`==`判断，如果都为`False`，那么就返回`False`。
 
 ---
+# 魔术方法（三）运算符魔术方法:
 
+## 一元操作符和函数：
+1. `__pos__(self)`魔术方法：在这个对象前面使用正号的时候执行的方法。
+
+2. `__neg__(self)`魔术方法：在这个对象前面使用负号的时候执行的方法。
+
+3. `__abs__(self)`魔术方法：在这个对象上使用abs函数的时候执行的方法。
+
+4. `__invert__(self)`魔术方法：在这个对象前面使用~的时候执行的方法。
+
+相关的示例代码如下：
+```py
+    class Coornidate(object):  
+        def __init__(self,x,y):  
+            self.x = x  
+            self.y = y
+    
+        def _pos__(self):  
+            return self
+    
+        def __neg__(self):  
+            new_coornidate = Coornidate(-self.x,-self.y)  
+            return new_coornidate
+    
+        def __abs__(self):  
+            new_coornidate = Coornidate(abs(self.x),abs(self.y))  
+            return new_coornidate
+    
+        def __invert__(self):  
+            new_coornidate = Coornidate(255-self.x,255-self.y)  
+            return new_coornidate
+    
+        def __str__(self):  
+            return "(%s,%s)" % (self.x,self.y)
+    
+    c1 = Coornidate(-1,2)  
+    c2 = +c1  
+    c3 = -c1  
+    c4 = abs(c1)  
+    c5 = ~c1  
+    print(c5)
+    
+```
+## 普通算数操作符：
+1. `__add__(self,other)`魔术方法：在两个对象相加的时候执行的方法。
+
+2. `__sub__(self,other)`魔术方法：在两个对象相减的时候执行的方法。
+
+3. `__mul__(self,other)`魔术方法：在两个对象相乘的时候执行的方法。
+
+4. `__floordiv__(self,other)`魔术方法：在两个对象使用//运算的时候执行的方法。
+
+5. `__div__(self,other)`魔术方法：在两个对象使用/运算的时候执行的方法。
+
+6. `__truediv__(self,other)`魔术方法：在两个对象之间使用真除的时候执行的方法。在`Python3`中使用`/`运算的时候会执行这个方法。在`Python2`中，默认使用`__div__方法`，如果`from __future__ import division`，那么将会使用`__truediv__`方法。
+
+7. `__mod__(self,other)`魔术方法：在使用`%`取模运算的时候执行的方法。
+
+相关示例代码如下：
+
+```py
+    class Coornidate(object):
+         def __init__(self,x,y):
+             self.x = x
+             self.y = y
+    
+         def __add__(self, other):
+             new_coornidate = Coornidate(self.x+other.x,self.y+other.y)
+             return new_coornidate
+    
+         def __sub__(self, other):
+             new_coornidate = Coornidate(self.x-other.x,self.y-other.y)
+             return new_coornidate
+    
+         def __mul__(self, other):
+             new_coornidate = Coornidate(self.x*other.x,self.y*other.y)
+             return new_coornidate
+    
+         def __floordiv__(self, other):
+             new_coornidate = Coornidate(self.x//other.x,self.y//other.y)
+             return new_coornidate
+    
+         def __div__(self, other):
+             new_coornidate = Coornidate(self.x/other.x,self.y/other.y)
+             return new_coornidate
+    
+         def __truediv__(self, other):
+             new_coornidate = Coornidate(self.x/other.x,self.y/other.y)
+             return new_coornidate
+    
+         def __mod__(self, other):
+             new_coornidate = Coornidate(self.x%other.x,self.y%other.y)
+             return new_coornidate
+    
+         def __str__(self):
+             return "(%s,%s)" % (self.x,self.y)
+    
+     c1 = Coornidate(4,6)
+     c2 = Coornidate(3,4)
+     c3 = c1+c2
+     c4 = c1 - c2
+     c5 = c1*c2
+     c6 = c1/c2
+     c7 = c1%c2
+     print(c7)
+```
+
+## 增量赋值：
+
+1. `__iadd__(self,other)`魔术方法：在给对象做`+=`运算的时候会执行的方法。
+
+2.`__isub__(self,other)`魔术方法：在给对象做`-=`运算的时候会执行的方法。
+
+3. `__imul__(self,other)`魔术方法：在给对象做`*=`运算的时候会执行的方法。
+
+4. `__idiv__(self,other)`魔术方法：在给对象做`/=`运算的时候会执行的方法。
+
+5. `__itruediv__(self,other)`魔术方法：在给对象做真`/=`运算的时候会执行的方法。
+
+相关示例代码如下：
+
+```py
+    class Coornidate(object):
+        def __init__(self,x,y):
+            self.x = x
+            self.y = y
+    
+        def __iadd__(self, other):
+            self.x += other
+            self.y += other
+            return self
+    
+        def __isub__(self, other):
+            new_coordinate = Coornidate(self.x-other,self.y-other)
+            return new_coordinate
+    
+        def __imul__(self, other):
+            new_coordinate = Coornidate(self.x*other,self.y*other)
+            return new_coordinate
+    
+        def __itruediv__(self, other):
+            new_coordinate = Coornidate(self.x/other,self.y/other)
+            return new_coordinate
+    
+        def __str__(self):
+            return "(%s,%s)" % (self.x,self.y)
+    
+    c1 = Coornidate(4,6)
+    # c1 += 1
+    # c1 -= 1
+    # c1 *= 1
+    # c1 /= 2
+    print(c1)
+```
 
 
