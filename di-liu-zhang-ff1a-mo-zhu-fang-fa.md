@@ -517,6 +517,101 @@
 ---
 
 # 魔术方法（七）会话管理
+在`Python2.5`中，为了代码利用定义了一个新的关键词`with`语句。之前在讲文件操作的时候，用过以下代码来打开一个文件以及关闭一个文件：
+
+```py
+with open('xxx.txt','r') as fp:
+    print(fp.read())
+```
+那么这种代码底层的原理是什么呢？这种代码专业术语叫做会话控制器，他通过控制两个魔术方法：`__enter__(self)`以及`__exit__(self,exception_type,exception_value,traceback)`来定义一个代码块被执行或者终止后会话管理器应该做什么。他可以被用来处理异常，清除工作或者做一些代码块执行完毕之后的日常工作。如果代码执行成功，没有任何异常，那么`exception_type`、`exception_value`以及`traceback`将会是`None`。否则的话你可以选择处理这个异常或者是直接交给用户处理。如果你想处理这个异常的话，那么必须在`__exit__`在所有结束之后返回`True`。
+这里自定义一个文件打开器，示例代码如下：
+```py
+    class FileOpener(object):
+        def __init__(self,*args,**kwargs):
+            self.args = args
+            self.kwargs = kwargs
+    
+        def __enter__(self):
+            self.fp = open(*self.args,**self.kwargs)
+            return self.fp
+    
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            self.fp.close()
+            print(exc_type)
+            return False
+    
+    
+    with FileOpener('test.txt','r') as fp:
+        a = 1
+        b = 0
+        # c = a/b
+        print(fp.read())
+```
+
+____
+# 魔术方法（八）——序列化对象
+有时候一个对象，想要保存在硬盘中。这时候我们就需要使用到对象持久化的技术了。在`Python`中，如果要将一个对象存储到硬盘中，需要使用`pickle`模块，其中`dump`方法可以将一个对象存到硬盘中，`load`方法可以从硬盘中加载一个对象。`Python`许多内置的数据结构是可以直接序列化的，比如：字典、列表、元组、字符串等。以下举几个例子来介绍下序列化的大体步骤：
+
+1. 写入对象到磁盘中:
+```py
+    import pickle
+    
+     data = {'foo': [1, 2, 3],
+             'bar': ('Hello', 'world!'),
+             'baz': True}
+     jar = open('data.pkl', 'wb')
+     pickle.dump(data, jar) # 写入数据到文件中
+     jar.close()
+    
+```
+2. 从硬盘中加载对象：
+```py
+    import pickle
+    
+     pkl_file = open('data.pkl', 'rb') # connect to the pickled data
+     data = pickle.load(pkl_file) # load it into a variable
+     print data
+     pkl_file.close()
+```
+
+## 自己定义可持续化的对象：
+自己定义的类的对象，默认情况下是不能持续化的。如果想要让自定义的对象可持续化，那么应该实现两个魔术方法：第一个是`__getstate__`，这个魔术方法在把对象存储到硬盘中的时候会调用的，会将这个方法的返回值存储进去，返回值应该是可以持续化的数据类型，比如字典、列表、字符串等；第二个是`__setstate__`，这个魔术方法是从硬盘中加载对象的时候，会调用，会将你之前存储进去的值，通过参数的形式传递进来。以下举个例子来说明下：
+    ```py
+    import pickle
+    
+    class Person(object):
+        def __init__(self,name,age):
+            self.name = name
+            self.age = age
+    
+        def __getstate__(self):
+            return {"name":self.name,'age':self.age}
+    
+        def __setstate__(self, state):
+            self.name = state['name']
+            self.age = state['age']
+    
+        def __str__(self):
+            return "<name:%s,age:%d>" % (self.name,self.age)
+    
+    
+    def dump_obj():
+        p1 = Person('zhiliao',18)
+        with open('person.pkl','wb') as fp:
+            pickle.dump(p1,fp)
+    
+    def load_obj():
+        with open('person.pkl','rb') as fp:
+            p1 = pickle.load(fp)
+            print(p1)
+    
+```
+## 哪些数据结构是可持续化的：
+列表、字典、字符串、元组、整型、集合、浮点类型、布尔类型。
+
+## 更多：
+`pickle`并不是很完美， `Pickle`文件很容易被不小心或者故意损坏， `Pickle`文件比纯文本文件要稍微安全一点，但是还是可以被利用运行恶意程序。 `Pickle`不是跨版本兼容的，所以尽量不要去分发 `Pickle`过的文本，因为别人并不一定能够打开。不过在做缓存或者其他需要序列化数据的时候， `Pickle`还是很有用处的。
+
 
 
 
