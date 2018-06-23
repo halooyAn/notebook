@@ -587,25 +587,25 @@ ____
             self.age = age
     
         def __getstate__(self):
-            return {"name":self.name,'age':self.age}
+            return {"name":self.name,"age":self.age}
     
         def __setstate__(self, state):
-            self.name = state['name']
-            self.age = state['age']
+            self.name = state["name"]
+            self.age = state["age"]
     
         def __str__(self):
+    
             return "<name:%s,age:%d>" % (self.name,self.age)
     
     
-    def dump_obj():
-        p1 = Person('zhiliao',18)
-        with open('person.pkl','wb') as fp:
-            pickle.dump(p1,fp)
+    person = Person("xiaobai",19)
     
-    def load_obj():
-        with open('person.pkl','rb') as fp:
-            p1 = pickle.load(fp)
-            print(p1)
+    with open("person.pkl","wb") as fp:
+        pickle.dump(person,fp)
+    
+    with open("person.pkl","rb") as fp2:
+        data = pickle.load(fp2)
+        print(data)
     
 ```
 ## 哪些数据结构是可持续化的：
