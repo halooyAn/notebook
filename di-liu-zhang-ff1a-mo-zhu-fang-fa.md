@@ -405,16 +405,26 @@
 
 ## `__getattribute__`魔术方法： {#getattribute魔术方法：}
 
-这个魔术方法是，只要你访问了一个对象的属性，不管这个属性存不存在都会去执行这个方法，所以在写这个方法的时候要小心循环调用。这个方法只能在新式类中使用，不能在旧时类中使用。示例代码如下：
+当访问某个实例属性时， getattribute会被无条件调用，如未实现自己的getattr方法，会抛出AttributeError提示找不到这个属性，如果自定义了自己getattr方法的话，方法会在这种找不到属性的情况下被调用，比如上面的例子中的情况。所以在找不到属性的情况下通过实现自定义的getattr方法来实现一些功能是一个不错的方式，因为它不会像getattribute方法每次都会调用可能会影响一些正常情况下的属性访问。                                                                                                                                                                                                                            在写这个方法的时候要小心循环调用。这个方法只能在新式类中使用，不能在旧时类中使用。示例代码如下：
 
 ```py
     class Person(object):
         def __init__(self,name):
             self.name = name
-
+            self.is_adult = False
+    
+        def __getattr__(self, item):
+    
+                return "default"
+    
+    
         def __getattribute__(self, item):
             print(item)
             return super(Person, self).__getattribute__(item)
+    
+    person1 = Person("xiaobai")
+    
+    print(person1.age)
 ```
 
 ---
