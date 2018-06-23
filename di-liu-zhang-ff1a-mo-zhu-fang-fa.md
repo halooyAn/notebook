@@ -552,28 +552,29 @@ ____
 # 魔术方法（八）——序列化对象
 有时候一个对象，想要保存在硬盘中。这时候我们就需要使用到对象持久化的技术了。在`Python`中，如果要将一个对象存储到硬盘中，需要使用`pickle`模块，其中`dump`方法可以将一个对象存到硬盘中，`load`方法可以从硬盘中加载一个对象。`Python`许多内置的数据结构是可以直接序列化的，比如：字典、列表、元组、字符串等。以下举几个例子来介绍下序列化的大体步骤：
 
-1. 写入对象到磁盘中:
-
 ```py
     import pickle
     
-     data = {'foo': [1, 2, 3],
-             'bar': ('Hello', 'world!'),
-             'baz': True}
-     jar = open('data.pkl', 'wb')
-     pickle.dump(data, jar) # 写入数据到文件中
-     jar.close()
+    a= {
+        "a":[1,2,3],
+        "b":"zimu",
+        "c":False
+    }
     
-```
-2. 从硬盘中加载对象：
-
-```py
-    import pickle
+    # 写入对象到硬盘中
+    with open("dump_obj.pkl","wb") as fp :
+        pickle.dump(a,fp)
     
-     pkl_file = open('data.pkl', 'rb') # connect to the pickled data
-     data = pickle.load(pkl_file) # load it into a variable
-     print data
-     pkl_file.close()
+    # 从硬盘中加载对象
+    with open("dump_obj.pkl","rb") as fp1:
+        date = pickle.load(fp1)
+        # for value in date.values():
+        #     print(value)
+        # for key in date.keys():
+        #     print(key)
+        for item in date.items():
+            print(item)
+    
 ```
 
 ## 自己定义可持续化的对象：
