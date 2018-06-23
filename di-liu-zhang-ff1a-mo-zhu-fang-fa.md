@@ -497,21 +497,23 @@
 例子如下：
 
 ```py
-    class Coornidate(object):
+    class Person(object):
         def __init__(self,x,y):
             self.x = x
             self.y = y
-
-        def __call__(self,x,y):
-            self.x,self.y = x,y
-
+    
         def __str__(self):
-            return '(%s,%s)' % (self.x,self.y)
-
-    c1 = Coornidate(1,2)
-    print(callable(c1))
-    c1(2,3)
-    print(c1)
+            return "(x:%d,y:%d)" %(self.x,self.y)
+    
+        def __call__(self,name,age):
+            self.x = x
+            self.y = y
+    
+    person1 = Person("p1",18)
+    
+    print(person1)
+    person1("xiaobai",11)
+    print(person1)
 ```
 
 ---
