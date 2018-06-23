@@ -424,8 +424,7 @@
 
 2. `__getitem__(self,key)`：在使用下标操作`temp['key']`以及切片操作的时候会执行这个魔术方法。
 
-3. `__setitem__(self,key,value)`：在给这个容器设置`key`和`value`  
-   的时候会调用这个魔术方法。
+3. `__setitem__(self,key,value)`：在给这个容器设置`key`和`value`的时候会调用这个魔术方法。
 
 4. `__delitem__(self,key)`：在删除容器中的某个`key`对应的这个值的时候会调用这个魔术方法。
 
@@ -450,6 +449,10 @@
          return len(self.values)
 
      def __getitem__(self, item):
+         if isinstance(item,slice):
+             return self.values[item.start:item.end:item:step]
+         else:
+             return self.values[item]
          return self.values[item]
 
      def __setitem__(self, key, value):
@@ -490,24 +493,28 @@
 允许一个类的实例像函数一样被调用。实质上说，这意味着`x()`与`x.__call__()`是相同的。注意`__call__`参数可变。这意味着你可以定义`__call__`为其他你想要的函数，无论有多少个参数。
 
 例子如下：
+
 ```py
     class Coornidate(object):
         def __init__(self,x,y):
             self.x = x
             self.y = y
-    
+
         def __call__(self,x,y):
             self.x,self.y = x,y
-    
+
         def __str__(self):
             return '(%s,%s)' % (self.x,self.y)
-    
+
     c1 = Coornidate(1,2)
     print(callable(c1))
     c1(2,3)
     print(c1)
 ```
-___
+
+---
+
 # 魔术方法（六）会话管理
+
 
 
