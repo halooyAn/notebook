@@ -450,12 +450,14 @@
 
      def __getitem__(self, item):
          if isinstance(item,slice):
-             return self.values[item.start:item.end:item:step]
-         else:
-             return self.values[item]
+             # 介绍下slice数据类型
+             # return self.values[item.start:item.end:item:step]
+         # else:
+             # return self.values[item]
          return self.values[item]
 
      def __setitem__(self, key, value):
+         
          self.values[key] = value
 
      def __delitem__(self, key):
@@ -514,7 +516,7 @@
 
 ---
 
-# 魔术方法（六）会话管理
+# 魔术方法（七）会话管理
 
 
 
