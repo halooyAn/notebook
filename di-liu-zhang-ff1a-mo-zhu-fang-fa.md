@@ -382,20 +382,25 @@
 只要给一个对象的属性设置值，那么就会调用这个方法。但是要注意的是，不要在这个方法中调用`self.xxx=xxx`的形式，因为会产生递归调用。如果想要给对象的属性设置值，那么应该使用`__dict__`这个魔术属性。示例代码如下：
 
 ```py
-    class Person(object):
+       class Person(object):
         def __init__(self,name):
             self.name = name
             self.is_adult = False
-
+    
         def __setattr__(self, key, value):
-            if key == 'age':
-                self.__dict__[key] = value
+            if key == "age":
+                self.__dict__['key'] = value
                 if value >= 18:
                     self.__dict__['is_adult'] = True
                 else:
                     self.__dict__['is_adult'] = False
             else:
-                self.__dict__[key] = value
+                self.__dict__['key'] = value
+    
+    
+    person1 = Person("xiaobai")
+    person1.age = 19
+    print(person1.is_adult)
 ```
 
 ## `__getattribute__`魔术方法： {#getattribute魔术方法：}
@@ -503,16 +508,14 @@
             self.y = y
     
         def __str__(self):
-            return "(x:%d,y:%d)" %(self.x,self.y)
+            return "(%d,%d)" %(self.x,self.y)
     
-        def __call__(self,name,age):
+        def __call__(self,x,y):
             self.x = x
             self.y = y
-    
-    person1 = Person("p1",18)
-    
+    person1 = Person(12,18)
     print(person1)
-    person1("xiaobai",11)
+    person1(13,11)
     print(person1)
 ```
 
