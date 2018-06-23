@@ -424,9 +424,9 @@
 
 2. `__getitem__(self,key)`：在使用下标操作`temp['key']`以及切片操作的时候会执行这个魔术方法。
 
-3. `__setitem__(self,key,value)`：在给这个容器设置`key`和`value`
+3. `__setitem__(self,key,value)`：在给这个容器设置`key`和`value`  
    的时候会调用这个魔术方法。
-   
+
 4. `__delitem__(self,key)`：在删除容器中的某个`key`对应的这个值的时候会调用这个魔术方法。
 
 5. `__iter__(self)`：在遍历这个容器的时候，会调用容器的这个方法，然后返回一个迭代器，再调用这个迭代器的`__next__`方法。
@@ -442,42 +442,72 @@
              self.values = []
          else:
              self.values = values
-    
+
      def __iter__(self):
          return iter(self.values)
-    
+
      def __len__(self):
          return len(self.values)
-    
+
      def __getitem__(self, item):
          return self.values[item]
-    
+
      def __setitem__(self, key, value):
          self.values[key] = value
-    
+
      def __delitem__(self, key):
          del self.values[key]
-    
+
      def __reversed__(self):
          return reversed(self.values)
-    
+
      def append(self,value):
          self.values.append(value)
-    
+
      def remove(self,value):
          return self.values.remove(value)
-    
+
      def head(self):
          return self.values[0]
-    
+
      def tail(self):
          return self.values[-1]
-    
+
      def take(self,n):
          return self.values[:n]
 ```
 
 ## 可变容器和不可变容器：
+
 可变容器可以对容器中的元素进行更改，比如删除一个元素，添加一个容器。而不可变容器不能做这些操作。因此如果你向定义一个不可变容器，那么不应该实现`__setitem__`、`__delitem__`方法。
+
+---
+
+# 魔术方法（六）可调用的对象 {#魔术方法（六）——可调用的对象}
+
+在`Python`中，一个特殊的魔术方法可以让类的实例的行为表现的像函数一样，你可以调用他们，将一个函数当做一个参数传到另外一个函数中等等。这是一个非常强大的特性让`Python`编程更加舒适甜美。`__call__(self, [args...])`
+
+允许一个类的实例像函数一样被调用。实质上说，这意味着`x()`与`x.__call__()`是相同的。注意`__call__`参数可变。这意味着你可以定义`__call__`为其他你想要的函数，无论有多少个参数。
+
+例子如下：
+```py
+    class Coornidate(object):
+        def __init__(self,x,y):
+            self.x = x
+            self.y = y
+    
+        def __call__(self,x,y):
+            self.x,self.y = x,y
+    
+        def __str__(self):
+            return '(%s,%s)' % (self.x,self.y)
+    
+    c1 = Coornidate(1,2)
+    print(callable(c1))
+    c1(2,3)
+    print(c1)
+```
 ___
+# 魔术方法（六）会话管理
+
 
